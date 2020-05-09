@@ -12,7 +12,7 @@ class ShoppingCart {
 
   addProduct(product) {
     this.items.push(product);
-    this.totalOutput = `<h2>Total: \$${1}</h2>`;
+    this.totalOutput.innerHTML = `<h2>Total: \$${1}</h2>`;
   }
 
   render() {
