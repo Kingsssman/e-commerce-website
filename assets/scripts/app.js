@@ -16,7 +16,7 @@ class ShoppingCart {
 
   addProduct(product) {
     this.items.push(product);
-    this.totalOutput.innerHTML = `<h2>Total: \$${this.totalAmount}</h2>`;
+    this.totalOutput.innerHTML = `<h2>Total: \$${this.totalAmount.toFixed(2)}</h2>`;
   }
 
   render() {
