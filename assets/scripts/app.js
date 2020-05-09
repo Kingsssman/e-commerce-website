@@ -10,9 +10,13 @@ class Product {
 class ShoppingCart {
   items = [];
 
+  get totalAmount() {
+    return this.items.reduce((prevValue, currItem) => prevValue + currItem.price, 0);
+  }
+
   addProduct(product) {
     this.items.push(product);
-    this.totalOutput.innerHTML = `<h2>Total: \$${1}</h2>`;
+    this.totalOutput.innerHTML = `<h2>Total: \$${this.totalAmount}</h2>`;
   }
 
   render() {
@@ -105,6 +109,8 @@ class Shop {
 }
 
 class App {
+  static cart;
+
   static init() {
     const shop = new Shop();
     shop.render();
