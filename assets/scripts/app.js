@@ -15,9 +15,11 @@ class ElementAttribute {
 }
 
 class Component {
-  constructor(renderHookId) {
+  constructor(renderHookId, shouldRender = true) {
     this.hookId = renderHookId;
-    this.render();
+    if (shouldRender) {
+      this.render();
+    }
   }
 
   render() {}
@@ -54,20 +56,28 @@ class ShoppingCart extends Component {
     this.totalOutput.innerHTML = `<h2>Total: \$${this.totalAmount.toFixed(2)}</h2>`;
   }
 
+  orderClickHandler() {
+    console.log('Adding products');
+    console.log(this.items);
+  }
+
   render() {
     const cartEl = this.createRootElement('section', 'cart');
     cartEl.innerHTML = `
       <h2>Total: \$${0}</h2>
       <button>Order Now!</button>
     `;
+    const orderButton = cartEl.querySelector('button');
+    orderButton.addEventListener('click', () => this.orderClickHandler());
     this.totalOutput = cartEl.querySelector('h2');
   }
 }
 
 class ProductItem extends Component {
   constructor(product, renderHookId) {
-    super(renderHookId);
+    super(renderHookId, false);
     this.product = product;
+    this.render();
   }
 
   addToCartHandler() {
@@ -93,49 +103,46 @@ class ProductItem extends Component {
 }
 
 class ProductList extends Component {
-  products = [
-    new Product(
-      'Product 1',
-      'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60',
-      99.99,
-      'Description 1',
-    ),
-    new Product(
-      'Product 2',
-      'https://images.pexels.com/photos/38568/apple-imac-ipad-workplace-38568.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
-      99.99,
-      'Description 2',
-    ),
-    new Product(
-      'Product 3',
-      'https://images.pexels.com/photos/1334597/pexels-photo-1334597.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
-      199.99,
-      'Description 3',
-    ),
-  ];
-
   constructor(renderHookId) {
-    super(renderHookId);
+    super(renderHookId, false);
+    this.products = [
+      new Product(
+        'Product 1',
+        'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60',
+        99.99,
+        'Description 1',
+      ),
+      new Product(
+        'Product 2',
+        'https://images.pexels.com/photos/38568/apple-imac-ipad-workplace-38568.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
+        99.99,
+        'Description 2',
+      ),
+      new Product(
+        'Product 3',
+        'https://images.pexels.com/photos/1334597/pexels-photo-1334597.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
+        199.99,
+        'Description 3',
+      ),
+    ];
+    this.render();
   }
 
   render() {
-    const prodList = this.createRootElement('ul', 'product-list', [
-      new ElementAttribute('id', 'prod-list'),
-    ]);
-
+    this.createRootElement('ul', 'product-list', [new ElementAttribute('id', 'prod-list')]);
     this.products.forEach(prod => {
-      new ProductItem(prod, prodList.id);
+      new ProductItem(prod, 'prod-list');
     });
   }
 }
 
-class Shop extends Component {
-  constructor(renderHookId) {
-    super(renderHookId);
+class Shop {
+  constructor() {
+    this.render();
   }
 
   render() {
-    new ShoppingCart('app');
+    this.cart = new ShoppingCart('app');
     new ProductList('app');
   }
 }
@@ -144,7 +151,7 @@ class App {
   static cart;
 
   static init() {
-    const shop = new Shop('app');
+    const shop = new Shop();
     this.cart = shop.cart;
   }
 
