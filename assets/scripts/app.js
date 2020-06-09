@@ -17,7 +17,10 @@ class ElementAttribute {
 class Component {
   constructor(renderHookId) {
     this.hookId = renderHookId;
+    this.render();
   }
+
+  render() {}
 
   createRootElement(tag, cssClasses, attributes) {
     const rootElement = document.createElement(tag);
@@ -121,18 +124,19 @@ class ProductList extends Component {
     ]);
 
     this.products.forEach(prod => {
-      const productItem = new ProductItem(prod, prodList.id);
-      productItem.render();
+      new ProductItem(prod, prodList.id);
     });
   }
 }
 
-class Shop {
+class Shop extends Component {
+  constructor(renderHookId) {
+    super(renderHookId);
+  }
+
   render() {
-    this.cart = new ShoppingCart('app');
-    this.cart.render();
-    const productList = new ProductList('app');
-    productList.render();
+    new ShoppingCart('app');
+    new ProductList('app');
   }
 }
 
@@ -140,8 +144,7 @@ class App {
   static cart;
 
   static init() {
-    const shop = new Shop();
-    shop.render();
+    const shop = new Shop('app');
     this.cart = shop.cart;
   }
 
