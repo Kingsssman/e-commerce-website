@@ -9,3 +9,4 @@ This project is my solution to simulates e-commerce functionality such as adding
 
 ## Preview
 ![](demo/demo1.png)
+![](demo/demo2.png)
